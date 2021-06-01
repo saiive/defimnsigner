@@ -16,13 +16,8 @@ class Proposal {
   String type;
   bool result = false;
 
-  Proposal(
-      {@required this.id,
-        @required this.title,
-        @required this.github,
-        @required this.type});
+  Proposal({@required this.id, @required this.title, @required this.github, @required this.type});
 }
-
 
 class LoadingWidget extends StatefulWidget {
   final String text;
@@ -73,13 +68,12 @@ class _LoadingWidget extends State<LoadingWidget> {
         color: Colors.transparent,
         child: Center(
             child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
-              SizedBox(height: 100, width: 100, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))),
-              SizedBox(height: 20),
-              Text(this._text ?? '')
-            ])));
+          SizedBox(height: 100, width: 100, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))),
+          SizedBox(height: 20),
+          Text(this._text ?? '')
+        ])));
   }
 }
-
 
 class LoadingOverlay {
   BuildContext _context;
@@ -126,7 +120,6 @@ class LoadingOverlay {
   }
 }
 
-
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -137,9 +130,9 @@ class MyApp extends StatelessWidget {
     var appBarColor = appTheme.lightColor;
     var appBarTextColor = appTheme.primary;
     var appBarActionColor = Colors.transparent;
-    
+
     ThemeData theme = ThemeData();
-    
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'DefiChain Masternode DFIP/CFP Signer',
@@ -175,8 +168,7 @@ class MyApp extends StatelessWidget {
           buttonColor: appTheme.primary,
           fontFamily: 'Helvetica, Arial, sans-serif',
           tabBarTheme: TabBarTheme(labelColor: appBarTextColor),
-          elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: appTheme.primary))
-      ),
+          elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: appTheme.primary))),
       home: MyHomePage(title: 'DefiChain Masternode DFIP/CFP Signer'),
     );
   }
@@ -192,11 +184,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _addressController =
-      TextEditingController(text: 'http://127.0.0.1:8555/');
+  var _addressController = TextEditingController(text: 'http://127.0.0.1:8555/');
   var _usernameController = TextEditingController(text: 'aRcHsKuR');
-  var _passwordController = TextEditingController(
-      text: 'c29193c17fc12001a1e890a2199b539253b65689cf6980d2aead5e6a7ffd9e88');
+  var _passwordController = TextEditingController(text: 'c29193c17fc12001a1e890a2199b539253b65689cf6980d2aead5e6a7ffd9e88');
 
   Map<int, Widget> _widgets = new Map<int, Widget>();
   var _myMasterNodes = [];
@@ -209,25 +199,12 @@ class _MyHomePageState extends State<MyHomePage> {
   var dfips = [
     new Proposal(
         id: 'dfip-10',
-        title:
-            'Long-term (5y & 10y) lock-in of staking DFI in exchange for higher staking returns',
+        title: 'Long-term (5y & 10y) lock-in of staking DFI in exchange for higher staking returns',
         github: 'https://github.com/DeFiCh/dfips/issues/39',
         type: 'DFIP'),
-    new Proposal(
-        id: 'dfip-11',
-        title: 'Interim ticker council establishment for asset tokenization',
-        github: 'https://github.com/DeFiCh/dfips/issues/41',
-        type: 'DFIP'),
-    new Proposal(
-        id: 'cfp-12',
-        title: 'DeFiChain Promo (15,000 DFI + 6,000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/28',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-13',
-        title: 'DeFiChain bug bounty fund pre-allocation (10,000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/30',
-        type: 'CFP'),
+    new Proposal(id: 'dfip-11', title: 'Interim ticker council establishment for asset tokenization', github: 'https://github.com/DeFiCh/dfips/issues/41', type: 'DFIP'),
+    new Proposal(id: 'cfp-12', title: 'DeFiChain Promo (15,000 DFI + 6,000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/28', type: 'CFP'),
+    new Proposal(id: 'cfp-13', title: 'DeFiChain bug bounty fund pre-allocation (10,000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/30', type: 'CFP'),
   ];
 
   @override
@@ -236,41 +213,61 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void listMasterNodes() async {
-
-    final overlay = LoadingOverlay.of(context);
+    var streamController = StreamController<String>();
+    final overlay = LoadingOverlay.of(context, loadingText: streamController.stream);
     overlay.show();
 
-    var masterNodes = await createJsonRpcCall('listmasternodes', {
-      "pagination": {"including_start": true, "limit": 100000}
-    });
+    try {
+      streamController.add("loading masternodes...");
+      var masterNodes = await createJsonRpcCall('listmasternodes', {
+        "pagination": {"including_start": true, "limit": 100000}
+      });
 
-    setState(() {
-      _myMasterNodes = [];
-      _signedMessages = [];
-      _signedText = '';
-    });
+      setState(() {
+        _myMasterNodes = [];
+        _signedMessages = [];
+        _signedText = '';
+      });
 
-    for (var mn in masterNodes.values) {
-      var addressInfo = await getAddressInfo(mn['ownerAuthAddress']);
+      for (var mn in masterNodes.values) {
+        var address = mn['ownerAuthAddress'];
+        var addressInfo = await getAddressInfo(mn['ownerAuthAddress']);
 
-      _masterNodes.add(mn);
+        streamController.add("Check if masternode is ours\n\r($address.)...");
 
-      if (addressInfo['ismine'] == true) {
-        _myMasterNodes.add(mn);
+        _masterNodes.add(mn);
+        if (addressInfo != null) {
+          if (addressInfo['ismine'] == true) {
+            _myMasterNodes.add(mn);
+          }
+        }
       }
+
+      setState(() {
+        _masterNodes = _masterNodes;
+        _myMasterNodes = _myMasterNodes;
+        _masterNodesLoaded = true;
+      });
+    } catch (e) {
+      showDialog<String>(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: const Text('Error occured'),
+                content: Text(e.toString()),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () => Navigator.pop(context, 'OK'),
+                    child: const Text('OK'),
+                  ),
+                ],
+              ));
+    } finally {
+      overlay.hide();
+      streamController.close();
     }
-
-    setState(() {
-      _masterNodes = _masterNodes;
-      _myMasterNodes = _myMasterNodes;
-      _masterNodesLoaded = true;
-    });
-
-    overlay.hide();
   }
 
-  void signMessageCfps() async
-  {
+  void signMessageCfps() async {
     final overlay = LoadingOverlay.of(context);
     overlay.show();
 
@@ -301,8 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
     overlay.hide();
   }
 
-  dynamic signMessage(String owner, String message)
-  {
+  dynamic signMessage(String owner, String message) {
     return createJsonRpcCall("signmessage", [owner, message]);
   }
 
@@ -314,29 +310,25 @@ class _MyHomePageState extends State<MyHomePage> {
     String username = _usernameController.text;
     String password = _passwordController.text;
     String address = _addressController.text;
-    String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
 
-    Map<String, String> headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json',
-      'authorization': basicAuth
-    };
+    Map<String, String> headers = {'content-type': 'application/json', 'accept': 'application/json', 'authorization': basicAuth};
 
-    String stringParams = json.encode(params);
+    try {
+      String stringParams = json.encode(params);
 
-    http.Response response = await http.post(Uri.parse(address),
-        headers: headers,
-        body:
-            '{"jsonrpc": "1.0", "id":"curltest", "method": "$method", "params": $stringParams }');
+      http.Response response = await http.post(Uri.parse(address), headers: headers, body: '{"jsonrpc": "1.0", "id":"curltest", "method": "$method", "params": $stringParams }');
 
-    final decoded = json.decode(response.body);
+      final decoded = json.decode(response.body);
 
-    if (null != decoded['error']) {
+      if (null != decoded['error']) {
+        return null;
+      }
+
+      return decoded['result'];
+    } catch (e) {
       return null;
     }
-
-    return decoded['result'];
   }
 
   @override
@@ -353,24 +345,21 @@ class _MyHomePageState extends State<MyHomePage> {
                       flex: 1,
                       child: Padding(
                           padding: EdgeInsets.all(10),
-                              child: SizedBox(height: 300, child: Scrollbar(
-                                  child: ListView(shrinkWrap: true,children: [
-                            ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: _myMasterNodes.length,
-                                itemBuilder: (context, index) {
-                                  var mn = _myMasterNodes.elementAt(index);
-                                  return SelectableText(mn['ownerAuthAddress'] ?? '');
-                                })
-                          ]))))),
-                  Expanded(
-                      flex: 1,
-                      child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: SizedBox(height: 300, child: Scrollbar(
-                              child: SelectableText(_signedText))))),
+                          child: SizedBox(
+                              height: 300,
+                              child: Scrollbar(
+                                  child: ListView(shrinkWrap: true, children: [
+                                ListView.builder(
+                                    physics: BouncingScrollPhysics(),
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: _myMasterNodes.length,
+                                    itemBuilder: (context, index) {
+                                      var mn = _myMasterNodes.elementAt(index);
+                                      return SelectableText(mn['ownerAuthAddress'] ?? '');
+                                    })
+                              ]))))),
+                  Expanded(flex: 1, child: Padding(padding: EdgeInsets.all(10), child: SizedBox(height: 300, child: Scrollbar(child: SelectableText(_signedText))))),
                   Expanded(
                       flex: 1,
                       child: Padding(
@@ -378,27 +367,20 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Column(children: [
                             TextField(
                               controller: _addressController,
-                              decoration:
-                                  InputDecoration(hintText: 'RPC Address'),
+                              decoration: InputDecoration(hintText: 'RPC Address'),
                             ),
                             TextField(
                               controller: _usernameController,
-                              decoration:
-                                  InputDecoration(hintText: 'RPC Username'),
+                              decoration: InputDecoration(hintText: 'RPC Username'),
                             ),
                             TextField(
                               controller: _passwordController,
-                              decoration:
-                                  InputDecoration(hintText: 'RPC Password'),
+                              decoration: InputDecoration(hintText: 'RPC Password'),
                             ),
                             Padding(padding: EdgeInsets.only(top: 10)),
-                            ElevatedButton(
-                                onPressed: listMasterNodes,
-                                child: Text('LoadMasterNodes')),
+                            ElevatedButton(onPressed: listMasterNodes, child: Text('LoadMasterNodes')),
                             Padding(padding: EdgeInsets.only(top: 10)),
-                            ElevatedButton(
-                                onPressed: _masterNodesLoaded ? signMessageCfps : null,
-                                child: Text('Sign'))
+                            ElevatedButton(onPressed: _masterNodesLoaded ? signMessageCfps : null, child: Text('Sign'))
                           ])))
                 ]),
               )),
@@ -452,9 +434,7 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.all(10),
               child: Container(
                 margin: EdgeInsets.only(top: 10.0),
-                child: Column(children: [
-
-                ]),
+                child: Column(children: []),
               )),
         ),
       ],
