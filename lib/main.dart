@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -20,6 +21,110 @@ class Proposal {
       required this.github,
       required this.type});
 }
+
+
+class LoadingWidget extends StatefulWidget {
+  final String text;
+  final Stream<String>? stream;
+
+  LoadingWidget({required this.text, this.stream});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _LoadingWidget();
+  }
+}
+
+class _LoadingWidget extends State<LoadingWidget> {
+  String? _text;
+  StreamSubscription<String>? _textSub;
+
+  void initAsync() async {
+    _text = widget.text;
+
+    if (widget.stream != null) {
+      _textSub = widget.stream!.listen((event) {
+        setState(() {
+          _text = event;
+        });
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initAsync();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    if (_textSub != null) {
+      _textSub!.cancel();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: Colors.transparent,
+        child: Center(
+            child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+              SizedBox(height: 100, width: 100, child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor))),
+              SizedBox(height: 20),
+              Text(this._text ?? '')
+            ])));
+  }
+}
+
+
+class LoadingOverlay {
+  BuildContext _context;
+  Stream<String> _loadingText;
+
+  void hide() {
+    Navigator.of(_context).pop();
+  }
+
+  void show() {
+    showDialog(
+        context: _context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Container(
+              child: Material(
+                  type: MaterialType.transparency,
+                  child: LoadingWidget(
+                    text: 'Loading',
+                    stream: _loadingText,
+                  )));
+        });
+  }
+
+  Future<T> during<T>(Future<T> future, {String? text}) {
+    show();
+    return future.whenComplete(() => hide());
+  }
+
+  LoadingOverlay._create(this._context, this._loadingText);
+
+  factory LoadingOverlay.of(BuildContext context, {Stream<String>? loadingText}) {
+    Stream<String> controller;
+    if (loadingText == null) {
+      // ignore: close_sinks
+      var streamController = StreamController<String>();
+      streamController.add('Loading');
+      controller = streamController.stream;
+    } else {
+      controller = loadingText;
+    }
+    var overlay = LoadingOverlay._create(context, controller);
+    return overlay;
+  }
+}
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -55,6 +160,8 @@ class _MyHomePageState extends State<MyHomePage> {
   var _myMasterNodes = [];
   var _masterNodes = [];
   var _signedMessages = [];
+  String _signedText = '';
+
   bool _masterNodesLoaded = false;
 
   var dfips = [
@@ -86,34 +193,20 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
   }
 
-  void readMNOwners() async {
-    String username = "";
-    String password =
-        "";
-    String address = "http://127.0.0.1:8555/";
-    String basicAuth =
-        'Basic ' + base64Encode(utf8.encode('$username:$password'));
-
-    Map<String, String> headers = {
-      'content-type': 'application/json',
-      'accept': 'application/json',
-      'authorization': basicAuth
-    };
-
-    http.Response response = await http.post(Uri.parse(address),
-        headers: headers,
-        body:
-            '{"jsonrpc": "1.0", "id":"curltest", "method": "listpoolpairs", "params": [] }');
-
-    final decoded = json.decode(response.body);
-    print(response);
-  }
-
   void listMasterNodes() async {
+
+    final overlay = LoadingOverlay.of(context);
+    overlay.show();
+
     var masterNodes = await createJsonRpcCall('listmasternodes', {
       "pagination": {"including_start": true, "limit": 100000}
     });
-    _myMasterNodes = [];
+
+    setState(() {
+      _myMasterNodes = [];
+      _signedMessages = [];
+      _signedText = '';
+    });
 
     for (var mn in masterNodes.values) {
       var addressInfo = await getAddressInfo(mn['ownerAuthAddress']);
@@ -130,25 +223,40 @@ class _MyHomePageState extends State<MyHomePage> {
       _myMasterNodes = _myMasterNodes;
       _masterNodesLoaded = true;
     });
+
+    overlay.hide();
   }
 
   void signMessageCfps() async
   {
+    final overlay = LoadingOverlay.of(context);
+    overlay.show();
+
     _signedMessages = [];
 
-    for (var mn in _myMasterNodes) {
-      for (var proposal in dfips) {
+    for (var proposal in dfips) {
+      _signedMessages.add('=========================');
+      _signedMessages.add('');
+      _signedMessages.add(proposal.github);
+      _signedMessages.add('');
+      _signedMessages.add('');
+
+      for (var mn in _myMasterNodes) {
         var message = proposal.id + " " + (proposal.result ? "yes" : "no");
 
         _signedMessages.add('\$ defi-cli signmessage ' + mn['ownerAuthAddress'] + " " + message);
         _signedMessages.add(await signMessage(mn['ownerAuthAddress'], message));
       }
+
+      _signedMessages.add('=========================');
     }
 
     setState(() {
       _signedMessages = _signedMessages;
+      _signedText = _signedMessages.join('\n');
     });
 
+    overlay.hide();
   }
 
   dynamic signMessage(String owner, String message)
@@ -203,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       flex: 1,
                       child: Padding(
                           padding: EdgeInsets.all(10),
-                              child: Scrollbar(
+                              child: SizedBox(height: 300, child: Scrollbar(
                                   child: ListView(shrinkWrap: true,children: [
                             ListView.builder(
                                 physics: BouncingScrollPhysics(),
@@ -214,23 +322,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                   var mn = _myMasterNodes.elementAt(index);
                                   return SelectableText(mn['ownerAuthAddress'] ?? '');
                                 })
-                          ])))),
+                          ]))))),
                   Expanded(
                       flex: 1,
                       child: Padding(
                           padding: EdgeInsets.all(10),
-                          child: Scrollbar(
-                              child: ListView(shrinkWrap: true,children: [
-                                ListView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: _signedMessages.length,
-                                    itemBuilder: (context, index) {
-                                      var signed = _signedMessages.elementAt(index);
-                                      return SelectableText(signed ?? '');
-                                    })
-                              ])))),
+                          child: SizedBox(height: 300, child: Scrollbar(
+                              child: SelectableText(_signedText))))),
                   Expanded(
                       flex: 1,
                       child: Padding(
@@ -255,6 +353,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             ElevatedButton(
                                 onPressed: listMasterNodes,
                                 child: Text('LoadMasterNodes')),
+                            Padding(padding: EdgeInsets.only(top: 10)),
                             ElevatedButton(
                                 onPressed: _masterNodesLoaded ? signMessageCfps : null,
                                 child: Text('Sign'))
