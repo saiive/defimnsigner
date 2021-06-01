@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:defimnsigner/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,18 +17,18 @@ class Proposal {
   bool result = false;
 
   Proposal(
-      {required this.id,
-      required this.title,
-      required this.github,
-      required this.type});
+      {@required this.id,
+        @required this.title,
+        @required this.github,
+        @required this.type});
 }
 
 
 class LoadingWidget extends StatefulWidget {
   final String text;
-  final Stream<String>? stream;
+  final Stream<String> stream;
 
-  LoadingWidget({required this.text, this.stream});
+  LoadingWidget({@required this.text, this.stream});
 
   @override
   State<StatefulWidget> createState() {
@@ -36,14 +37,14 @@ class LoadingWidget extends StatefulWidget {
 }
 
 class _LoadingWidget extends State<LoadingWidget> {
-  String? _text;
-  StreamSubscription<String>? _textSub;
+  String _text;
+  StreamSubscription<String> _textSub;
 
   void initAsync() async {
     _text = widget.text;
 
     if (widget.stream != null) {
-      _textSub = widget.stream!.listen((event) {
+      _textSub = widget.stream.listen((event) {
         setState(() {
           _text = event;
         });
@@ -62,7 +63,7 @@ class _LoadingWidget extends State<LoadingWidget> {
     super.dispose();
 
     if (_textSub != null) {
-      _textSub!.cancel();
+      _textSub.cancel();
     }
   }
 
@@ -103,14 +104,14 @@ class LoadingOverlay {
         });
   }
 
-  Future<T> during<T>(Future<T> future, {String? text}) {
+  Future<T> during<T>(Future<T> future, {String text}) {
     show();
     return future.whenComplete(() => hide());
   }
 
   LoadingOverlay._create(this._context, this._loadingText);
 
-  factory LoadingOverlay.of(BuildContext context, {Stream<String>? loadingText}) {
+  factory LoadingOverlay.of(BuildContext context, {Stream<String> loadingText}) {
     Stream<String> controller;
     if (loadingText == null) {
       // ignore: close_sinks
@@ -130,10 +131,51 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    var appTheme = new DefiThemeDark();
+
+    var shadowColor = Colors.transparent;
+    var appBarColor = appTheme.lightColor;
+    var appBarTextColor = appTheme.primary;
+    var appBarActionColor = Colors.transparent;
+    
+    ThemeData theme = ThemeData();
+    
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'DefiChain Masternode DFIP/CFP Signer',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
+          appBarTheme: AppBarTheme(
+            backgroundColor: appBarColor,
+            shadowColor: shadowColor,
+            iconTheme: IconThemeData(color: appBarActionColor),
+            foregroundColor: appBarTextColor,
+            actionsIconTheme: IconThemeData(color: appBarTextColor),
+            toolbarTextStyle: TextStyle(color: appBarTextColor, fontWeight: FontWeight.bold),
+            titleTextStyle: TextStyle(color: appBarTextColor, fontWeight: FontWeight.bold),
+            textTheme: theme.textTheme.copyWith(
+              headline6: theme.textTheme.headline6.copyWith(color: appBarTextColor, fontSize: 20.0),
+            ),
+          ),
+          brightness: appTheme.brightness,
+          primaryColor: appTheme.primary,
+          scaffoldBackgroundColor: appTheme.backgroundColor,
+          canvasColor: appTheme.backgroundColor,
+          textTheme: TextTheme(
+              headline3: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: appTheme.text,
+              ),
+              bodyText1: TextStyle(
+                color: appTheme.text,
+              ),
+              bodyText2: TextStyle(
+                color: appTheme.text,
+              )),
+          buttonColor: appTheme.primary,
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          tabBarTheme: TabBarTheme(labelColor: appBarTextColor),
+          elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: appTheme.primary))
       ),
       home: MyHomePage(title: 'DefiChain Masternode DFIP/CFP Signer'),
     );
@@ -141,7 +183,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({Key key, @required this.title}) : super(key: key);
 
   final String title;
 
