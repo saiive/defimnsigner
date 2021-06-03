@@ -198,13 +198,65 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var dfips = [
     new Proposal(
-        id: 'dfip-10',
-        title: 'Long-term (5y & 10y) lock-in of staking DFI in exchange for higher staking returns',
+        id: 'dfip-2106-01',
+        title: 'DFIP 2106-01: Long-term (5y & 10y) lock-in of staking DFI in exchange for higher staking returns',
         github: 'https://github.com/DeFiCh/dfips/issues/39',
         type: 'DFIP'),
-    new Proposal(id: 'dfip-11', title: 'Interim ticker council establishment for asset tokenization', github: 'https://github.com/DeFiCh/dfips/issues/41', type: 'DFIP'),
-    new Proposal(id: 'cfp-12', title: 'DeFiChain Promo (15,000 DFI + 6,000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/28', type: 'CFP'),
-    new Proposal(id: 'cfp-13', title: 'DeFiChain bug bounty fund pre-allocation (10,000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/30', type: 'CFP'),
+    new Proposal(
+        id: 'dfip-2106-02',
+        title: 'DFIP 2106-02: Interim ticker council establishment for asset tokenization',
+        github: 'https://github.com/DeFiCh/dfips/issues/41',
+        type: 'DFIP'),
+    new Proposal(
+        id: 'cfp-2106-01',
+        title: 'CFP 2106-01: DeFiChain Promo (21,000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/28',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-02',
+        title: 'CFP 2106-02: DeFiChain bug bounty fund pre-allocation (10,000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/30',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-03',
+        title: 'DeFiChain Promo (15,000 DFI + 6,000 DFI)',
+        github: 'CFP 2106-03: DeFiChain Notification Service (5,000 DFI)',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-04',
+        title: 'CFP 2106-04: DeFiChain Rewardhelper (4,000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/33',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-05',
+        title: 'CFP 2106-05: DeFiChain Masternode Monitor (7,500 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/34',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-06',
+        title: 'CFP 2106-06: DeFiChain News Team (12,000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/35',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-07',
+        title: 'CFP 2106-07: mydefichain Masternode Service (50,000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/36',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-08',
+        title: 'CFP 2106-08: The "DefiNode" for more decentralization (8,800 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/37',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-09',
+        title: 'CFP 2106-09: Liquidity Mining Calculator (987 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/38',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2106-10',
+        title: 'CFP 2106-10: DeFiChain Fiat Exchange (150,000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/40',
+        type: 'CFP'),
   ];
 
   @override
@@ -281,7 +333,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _signedMessages.add('');
 
       for (var mn in _myMasterNodes) {
-        var message = proposal.id + " " + (proposal.result ? "yes" : "no");
+        var message = proposal.id + "-" + (proposal.result ? "yes" : "no");
 
         _signedMessages.add('\$ defi-cli signmessage ' + mn['ownerAuthAddress'] + " " + message);
         _signedMessages.add(await signMessage(mn['ownerAuthAddress'], message));
