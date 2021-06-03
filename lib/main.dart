@@ -185,8 +185,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _addressController = TextEditingController(text: 'http://127.0.0.1:8555/');
-  var _usernameController = TextEditingController(text: 'aRcHsKuR');
-  var _passwordController = TextEditingController(text: 'c29193c17fc12001a1e890a2199b539253b65689cf6980d2aead5e6a7ffd9e88');
+  // var _usernameController = TextEditingController(text: 'aRcHsKuR');
+  // var _passwordController = TextEditingController(text: 'c29193c17fc12001a1e890a2199b539253b65689cf6980d2aead5e6a7ffd9e88');
+
+  var _usernameController = TextEditingController(text: '');
+  var _passwordController = TextEditingController(text: '');
 
   Map<int, Widget> _widgets = new Map<int, Widget>();
   var _myMasterNodes = [];
