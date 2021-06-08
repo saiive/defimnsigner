@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:defimnsigner/themes.dart';
 import 'package:flutter/material.dart';
@@ -235,6 +236,20 @@ class _MyHomePageState extends State<MyHomePage> {
         "pagination": {"including_start": true, "limit": 100000}
       });
 
+      var addresses = await createJsonRpcCall('listaddressgroupings', {});
+      var addressList = List<String>.empty(growable: true);
+
+      for (var address in addresses) {
+        if (address is List<dynamic>) {
+          for (var addressEl in (address as List<dynamic>)) {
+            var add = (addressEl as List<dynamic>).first.toString();
+            if (add.startsWith("8")) addressList.add(add);
+          }
+        }
+      }
+
+      sleep(Duration(milliseconds: 5));
+
       setState(() {
         _myMasterNodes = [];
         _signedMessages = [];
@@ -243,16 +258,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
       for (var mn in masterNodes.values) {
         var address = mn['ownerAuthAddress'];
-        var addressInfo = await getAddressInfo(mn['ownerAuthAddress']);
-
-        streamController.add("Check if masternode is ours\n\r($address.)...");
+        var resignTx = mn['resignTx'];
 
         _masterNodes.add(mn);
-        if (addressInfo != null) {
-          if (addressInfo['ismine'] == true) {
-            _myMasterNodes.add(mn);
-          }
+        if (!addressList.contains(address)) {
+          continue;
         }
+
+        if (resignTx != "0000000000000000000000000000000000000000000000000000000000000000") {
+          continue;
+        }
+
+        streamController.add("Check if masternode is ours\n\r($address.)...");
+        _myMasterNodes.add(mn);
       }
 
       setState(() {
@@ -276,6 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } finally {
       overlay.hide();
       streamController.close();
+      _masterNodesLoaded = true;
     }
   }
 
@@ -323,17 +342,18 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   dynamic createJsonRpcCall(String method, dynamic params) async {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-    String address = _addressController.text;
-    String basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+    final address = _addressController.text;
+    final basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    final uri = Uri.parse(address);
 
     Map<String, String> headers = {'content-type': 'application/json', 'accept': 'application/json', 'authorization': basicAuth};
 
     try {
       String stringParams = json.encode(params);
 
-      http.Response response = await http.post(Uri.parse(address), headers: headers, body: '{"jsonrpc": "1.0", "id":"curltest", "method": "$method", "params": $stringParams }');
+      http.Response response = await http.post(uri, headers: headers, body: '{"jsonrpc": "1.0", "id":"curltest", "method": "$method", "params": $stringParams }');
 
       final decoded = json.decode(response.body);
 
@@ -343,7 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       return decoded['result'];
     } catch (e) {
-      return null;
+      throw e;
     }
   }
 
