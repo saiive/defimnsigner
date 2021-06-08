@@ -401,6 +401,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Padding(
                           padding: EdgeInsets.all(10),
                           child: Column(children: [
+                            Text('Address for donations:'),
+                            SelectableText('dResgN7szqZ6rysYbbj2tUmqjcGHD4LmKs'),
                             TextField(
                               controller: _addressController,
                               decoration: InputDecoration(hintText: 'RPC Address'),
