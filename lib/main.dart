@@ -202,34 +202,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var dfips = [
     new Proposal(
-        id: 'dfip-2107-b',
-        title: 'DFIP 2107-B: Reallocation of block reward for decentralized tokenization incentives',
-        github: 'https://github.com/DeFiCh/dfips/issues/50',
-        type: 'DFIP'),
-    new Proposal(
         id: 'dfip-2107-a',
         title: 'DFIP 2107-A: Introduction of USDC-DFI DEX and reallocation of liquidity mining reward from USDT-DFI',
         github: 'https://github.com/DeFiCh/dfips/issues/49',
         type: 'DFIP'),
     new Proposal(
-        id: 'cfp-2107-06',
-        title: 'CFP 2107-06: Appreciation for CryptoID Chainz DeFiChain blockchain explorer (15 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/48',
-        type: 'CFP'),
+        id: 'dfip-2107-b',
+        title: 'DFIP 2107-B: Reallocation of block reward for decentralized tokenization incentives',
+        github: 'https://github.com/DeFiCh/dfips/issues/50',
+        type: 'DFIP'),
     new Proposal(
-        id: 'cfp-2107-05',
-        title: 'CFP 2107-05: DeFiChain bug bounty fund pre-allocation (20 000 DFI)           ',
-        github: 'https://github.com/DeFiCh/dfips/issues/47',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2107-04',
-        title: 'CFP 2107-04: defichain-income CFP#2 Long term (20 000 DFI)                   ',
-        github: 'https://github.com/DeFiCh/dfips/issues/46',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2107-03',
-        title: 'CFP 2107-03: DFI Signal (10 000 DFI)                                          ',
-        github: 'https://github.com/DeFiCh/dfips/issues/45',
+        id: 'cfp-2107-01',
+        title: 'CFP 2107-01: saiive.live - DeFi Wallet - Light Wallet (40 000 DFI)            ',
+        github: 'https://github.com/DeFiCh/dfips/issues/43',
         type: 'CFP'),
     new Proposal(
         id: 'cfp-2107-02',
@@ -237,10 +222,25 @@ class _MyHomePageState extends State<MyHomePage> {
         github: 'https://github.com/DeFiCh/dfips/issues/44',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2107-01',
-        title: 'CFP 2107-01: saiive.live - DeFi Wallet - Light Wallet (40 000 DFI)            ',
-        github: 'https://github.com/DeFiCh/dfips/issues/43',
-        type: 'CFP')
+        id: 'cfp-2107-03',
+        title: 'CFP 2107-03: DFI Signal (10 000 DFI)                                          ',
+        github: 'https://github.com/DeFiCh/dfips/issues/45',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2107-04',
+        title: 'CFP 2107-04: defichain-income CFP#2 Long term (20 000 DFI)                   ',
+        github: 'https://github.com/DeFiCh/dfips/issues/46',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2107-05',
+        title: 'CFP 2107-05: DeFiChain bug bounty fund pre-allocation (20 000 DFI)           ',
+        github: 'https://github.com/DeFiCh/dfips/issues/47',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2107-06',
+        title: 'CFP 2107-06: Appreciation for CryptoID Chainz DeFiChain blockchain explorer (15 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/48',
+        type: 'CFP'),
   ];
 
   @override
