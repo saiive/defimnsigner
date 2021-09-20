@@ -5,8 +5,20 @@ import 'dart:io';
 import 'package:defimnsigner/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
+import 'package:window_size/window_size.dart';
+
+const String APP_TITLE = "saiive.signer - 2109 DefiChain Masternode DFIP/CFP Signer";
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+    setWindowTitle(APP_TITLE);
+    setWindowMinSize(const Size(700, 500));
+    setWindowMaxSize(Size.infinite);
+  }
+
   runApp(MyApp());
 }
 
@@ -17,7 +29,11 @@ class Proposal {
   String type;
   bool result = null;
 
-  Proposal({@required this.id, @required this.title, @required this.github, @required this.type});
+  bool defaultValue = false;
+
+  Proposal({@required this.id, @required this.title, @required this.github, @required this.type, this.defaultValue}) {
+    this.result = defaultValue;
+  }
 }
 
 class LoadingWidget extends StatefulWidget {
@@ -136,7 +152,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'DefiChain Masternode DFIP/CFP Signer',
+      title: APP_TITLE,
       theme: ThemeData(
           appBarTheme: AppBarTheme(
             backgroundColor: appBarColor,
@@ -170,7 +186,7 @@ class MyApp extends StatelessWidget {
           fontFamily: 'Helvetica, Arial, sans-serif',
           tabBarTheme: TabBarTheme(labelColor: appBarTextColor),
           elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: appTheme.primary))),
-      home: MyHomePage(title: 'DefiChain Masternode DFIP/CFP Signer'),
+      home: MyHomePage(title: APP_TITLE),
     );
   }
 }
@@ -202,45 +218,97 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var dfips = [
     new Proposal(
-        id: 'dfip-2107-a',
-        title: 'DFIP 2107-A: Introduction of USDC-DFI DEX and reallocation of liquidity mining reward from USDT-DFI',
-        github: 'https://github.com/DeFiCh/dfips/issues/49',
-        type: 'DFIP'),
-    new Proposal(
-        id: 'dfip-2107-b',
-        title: 'DFIP 2107-B: Reallocation of block reward for decentralized tokenization incentives',
-        github: 'https://github.com/DeFiCh/dfips/issues/50',
-        type: 'DFIP'),
-    new Proposal(
-        id: 'cfp-2107-01',
-        title: 'CFP 2107-01: saiive.live - DeFi Wallet - Light Wallet (40 000 DFI)            ',
-        github: 'https://github.com/DeFiCh/dfips/issues/43',
+        id: 'cfp-2109-01',
+        title: 'CFP 2109-01: Defichain Chrome Extension (13 500 DFI)                             ',
+        github: 'https://github.com/DeFiCh/dfips/issues/51',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2107-02',
-        title: 'CFP 2107-02: Payment New DefiChain Foundation (21 000 DFI)                     ',
-        github: 'https://github.com/DeFiCh/dfips/issues/44',
+        id: 'cfp-2109-02',
+        title: 'CFP 2109-02: for moderation and technical improvement concerning the Telegram group: Crypto Steuern DE (585 DFI)                     ',
+        github: 'https://github.com/DeFiCh/dfips/issues/52',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2107-03',
-        title: 'CFP 2107-03: DFI Signal (10 000 DFI)                                          ',
-        github: 'https://github.com/DeFiCh/dfips/issues/45',
+        id: 'cfp-2109-03',
+        title: 'CFP 2109-03: DeFined designed - DeFiNode 3D printing service (20 000 DFI)                                          ',
+        github: 'https://github.com/DeFiCh/dfips/issues/54',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2107-04',
-        title: 'CFP 2107-04: defichain-income CFP#2 Long term (20 000 DFI)                   ',
-        github: 'https://github.com/DeFiCh/dfips/issues/46',
+        id: 'cfp-2109-04',
+        title: 'CFP 2109-04: The DefiMate (39 200 DFI)                                        ',
+        github: 'https://github.com/DeFiCh/dfips/issues/56',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2107-05',
-        title: 'CFP 2107-05: DeFiChain bug bounty fund pre-allocation (20 000 DFI)           ',
-        github: 'https://github.com/DeFiCh/dfips/issues/47',
+        id: 'cfp-2109-05',
+        title: 'CFP 2109-05: Telegram Moderators (5 500 DFI)                                   ',
+        github: 'https://github.com/DeFiCh/dfips/issues/57',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2107-06',
-        title: 'CFP 2107-06: Appreciation for CryptoID Chainz DeFiChain blockchain explorer (15 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/48',
+        id: 'cfp-2109-06',
+        title: 'CFP 2109-06: „Promotion tools“ (1 500 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/58',
         type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-07',
+        title: 'CFP 2109-07: Defilinks.io - the Gateway into the DeFiChain Universe (20 000 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/59',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-08',
+        title: 'CFP 2109-08: Masternode Health (5 000 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/60',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-09',
+        title: 'CFP 2109-09: DeFiChain WebWallet (65 772 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/61',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-10',
+        title: 'CFP 2109-10: DefiChain YouTube formats (DeFiChain News Team) (20 000 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/62',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-11',
+        title: 'CFP 2109-11: Defichain helps decarbonizing Defichain (20 000 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/63',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-12',
+        title: 'CFP 2109-12: DeFiChain Value - Be ahead, follow the strategies (16 000 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/65',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-13',
+        title: 'CFP 2109-13: DFX Smartphone App (26 000 DFI)                                    ',
+        github: 'https://github.com/DeFiCh/dfips/issues/66',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-14',
+        title: 'CFP 2109-14: DeFiChain Master Noder Signer (6 000 DFI)                                     ',
+        github: 'https://github.com/DeFiCh/dfips/issues/68',
+        type: 'CFP',
+        defaultValue: true),
+    new Proposal(
+        id: 'cfp-2109-15',
+        title: 'CFP 2109-15: saiive.live - Jellyfish Compatibility (5 000 DFI)                                     ',
+        github: 'https://github.com/DeFiCh/dfips/issues/69',
+        type: 'CFP',
+        defaultValue: true),
+    new Proposal(
+        id: 'cfp-2109-16',
+        title: 'CFP 2109-16: DFX - Decentralized Finance Exchange (135 000 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/70',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-17',
+        title: 'CFP 2109-17: DeFiChain Accelerator (50 000 DFI)                                      ',
+        github: 'https://github.com/DeFiCh/dfips/issues/71',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2109-18',
+        title: 'CFP 2109-18: DeFiChain Networkmap (1 893 DFI)                                     ',
+        github: 'https://github.com/DeFiCh/dfips/issues/72',
+        type: 'CFP')
   ];
 
   @override
@@ -321,7 +389,38 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void signMessageCfps() async {
+  void signMessageCfpsWithAlert() async {
+    var import = ElevatedButton(
+      child: Text("Ok"),
+      onPressed: () async {
+        try {
+          await signMessageCfps();
+        } finally {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+
+    AlertDialog alert = AlertDialog(
+      title: Center(child: Text("Donate")),
+      content: Center(
+          child: Column(children: [
+        Text("Wanna buy us a coffee? This app is free, but still costs time to maintain ;)\n\n\nSponsor uns doch einen Kaffee ;)"),
+        SizedBox(height: 50),
+        SelectableText('dResgN7szqZ6rysYbbj2tUmqjcGHD4LmKs'),
+      ])),
+      actions: [import],
+    );
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  Future signMessageCfps() async {
     final overlay = LoadingOverlay.of(context);
     overlay.show();
 
@@ -390,6 +489,10 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  openProposalLink(BuildContext context, Proposal proposal) async {
+    await launch(proposal.github);
+  }
+
   @override
   Widget build(BuildContext context) {
     var scrollView = CustomScrollView(
@@ -441,7 +544,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             Padding(padding: EdgeInsets.only(top: 10)),
                             ElevatedButton(onPressed: listMasterNodes, child: Text('LoadMasterNodes')),
                             Padding(padding: EdgeInsets.only(top: 10)),
-                            ElevatedButton(onPressed: _masterNodesLoaded ? signMessageCfps : null, child: Text('Sign'))
+                            ElevatedButton(onPressed: _masterNodesLoaded ? signMessageCfpsWithAlert : null, child: Text('Sign'))
                           ])))
                 ]),
               )),
@@ -451,7 +554,12 @@ class _MyHomePageState extends State<MyHomePage> {
             (BuildContext context, int index) {
               final account = dfips[index];
               return new Column(children: [
-                Text(account.title),
+                GestureDetector(
+                  child: Text(account.title),
+                  onTap: () async {
+                    await openProposalLink(context, account);
+                  },
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
