@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:window_size/window_size.dart';
+import 'package:ini/ini.dart';
 
 const String APP_TITLE = "saiive.signer - 2109 DefiChain Masternode DFIP/CFP Signer";
 
@@ -202,9 +203,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   var _addressController = TextEditingController(text: 'http://127.0.0.1:8555/');
-  // var _usernameController = TextEditingController(text: 'aRcHsKuR');
-  // var _passwordController = TextEditingController(text: 'c29193c17fc12001a1e890a2199b539253b65689cf6980d2aead5e6a7ffd9e88');
-
   var _usernameController = TextEditingController(text: '');
   var _passwordController = TextEditingController(text: '');
 
@@ -213,107 +211,164 @@ class _MyHomePageState extends State<MyHomePage> {
   var _masterNodes = [];
   var _signedMessages = [];
   String _signedText = '';
+  String filePathConfig = '';
 
   bool _masterNodesLoaded = false;
 
   var dfips = [
     new Proposal(
-        id: 'cfp-2109-01',
-        title: 'CFP 2109-01: Defichain Chrome Extension (13 500 DFI)                             ',
-        github: 'https://github.com/DeFiCh/dfips/issues/51',
+        id: 'dfip-2111-a',
+        title: 'DFIP 2111-A: Adding liquidity pool Luna/Dfi',
+        github: 'https://github.com/DeFiCh/dfips/issues/79',
+        type: 'DFIP'),
+    new Proposal(
+        id: 'dfip-2111-B',
+        title: 'DFIP 2111-B: Vote of confidence: Ethereum Virtual Machine (EVM) Support',
+        github: 'https://github.com/DeFiCh/dfips/issues/96',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-02',
-        title: 'CFP 2109-02: for moderation and technical improvement concerning the Telegram group: Crypto Steuern DE (585 DFI)                     ',
-        github: 'https://github.com/DeFiCh/dfips/issues/52',
+        id: 'cfp-2111-01',
+        title: 'CFP 2111-01: defichain-history - Visualize Pool Data (25 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/74',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-03',
-        title: 'CFP 2109-03: DeFined designed - DeFiNode 3D printing service (20 000 DFI)                                          ',
-        github: 'https://github.com/DeFiCh/dfips/issues/54',
+        id: 'cfp-2111-02',
+        title: 'CFP 2111-02: Vault and loan monitor with enhanced notifications (45 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/75',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-04',
-        title: 'CFP 2109-04: The DefiMate (39 200 DFI)                                        ',
-        github: 'https://github.com/DeFiCh/dfips/issues/56',
+        id: 'cfp-2111-03',
+        title: 'CFP 2111-03: DeFiChain Society Foundation (20 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/76',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-05',
-        title: 'CFP 2109-05: Telegram Moderators (5 500 DFI)                                   ',
-        github: 'https://github.com/DeFiCh/dfips/issues/57',
+        id: 'cfp-2111-04',
+        title: 'CFP 2111-04: Spanish and French translation for Desktop, Mobile APP and Website during 1 year (5 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/77',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-06',
-        title: 'CFP 2109-06: „Promotion tools“ (1 500 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/58',
+        id: 'cfp-2111-05',
+        title: 'CFP 2111-05: DFI.TAX (24 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/78',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-07',
-        title: 'CFP 2109-07: Defilinks.io - the Gateway into the DeFiChain Universe (20 000 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/59',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2109-08',
-        title: 'CFP 2109-08: Masternode Health (5 000 DFI)                                      ',
+        id: 'cfp-2111-06',
+        title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/60',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2109-09',
-        title: 'CFP 2109-09: DeFiChain WebWallet (65 772 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/61',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2109-10',
-        title: 'CFP 2109-10: DefiChain YouTube formats (DeFiChain News Team) (20 000 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/62',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2109-11',
-        title: 'CFP 2109-11: Defichain helps decarbonizing Defichain (20 000 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/63',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2109-12',
-        title: 'CFP 2109-12: DeFiChain Value - Be ahead, follow the strategies (16 000 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/65',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2109-13',
-        title: 'CFP 2109-13: DFX Smartphone App (26 000 DFI)                                    ',
-        github: 'https://github.com/DeFiCh/dfips/issues/66',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2109-14',
-        title: 'CFP 2109-14: DeFiChain Master Noder Signer (6 000 DFI)                                     ',
-        github: 'https://github.com/DeFiCh/dfips/issues/68',
         type: 'CFP',
         defaultValue: true),
     new Proposal(
-        id: 'cfp-2109-15',
-        title: 'CFP 2109-15: saiive.live - Jellyfish Compatibility (5 000 DFI)                                     ',
-        github: 'https://github.com/DeFiCh/dfips/issues/69',
+        id: 'cfp-2111-07',
+        title: 'CFP 2111-07: saiive.live iOS/Mac Store Release + Apple Watch (10 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/81',
         type: 'CFP',
         defaultValue: true),
     new Proposal(
-        id: 'cfp-2109-16',
-        title: 'CFP 2109-16: DFX - Decentralized Finance Exchange (135 000 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/70',
+        id: 'cfp-2111-08',
+        title: 'CFP 2111-08: Establish a Platform for virtual Community Meetups to better connect the Community (20 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/82',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-17',
-        title: 'CFP 2109-17: DeFiChain Accelerator (50 000 DFI)                                      ',
-        github: 'https://github.com/DeFiCh/dfips/issues/71',
+        id: 'cfp-2111-09',
+        title: 'CFP 2111-09: Expansion of the DeFiChain Community to Spanish-speaking countries (5 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/83',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2109-18',
-        title: 'CFP 2109-18: DeFiChain Networkmap (1 893 DFI)                                     ',
-        github: 'https://github.com/DeFiCh/dfips/issues/72',
-        type: 'CFP')
+        id: 'cfp-2111-10',
+        title: 'CFP 2111-10: DFX Masternode service – Free of charge on- and off-ramp and automatic transaction service for Masternode operators (60 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/84',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-11',
+        title: 'CFP 2111-11: DFX Smartphone App (40 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/85',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-12',
+        title: 'CFP 2111-12: DeFiChain NFTs for the DeFiChain Community (3 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/86',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-13',
+        title: 'CFP 2111-13: Boost the defichain testnet infrastructure for a better testing and improved future product integration testing capabilities (35 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/87',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-14',
+        title: 'CFP 2111-14: DeFined designed - DeFiNode 3D printing service (13 100 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/88',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-15',
+        title: 'CFP 2111-15: DefichainGaS" your Giveawayservice (1 500 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/89',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-16',
+        title: 'CFP 2111-16: Non-custodial, Decentralised Chain-Interoperability and Funds-Transfer Solution Between DeFiChain and the Ethereum Ecosystem (100 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/90',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-17',
+        title: 'CFP 2111-17: DeFiChain Promo — January to June 2022 (10 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/91',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-18',
+        title: 'CFP 2111-18: IT’S ABOUT MARKETING: making DeFiChain INTERNATIONAL (40 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/92',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-19',
+        title: 'CFP 2111-19: #roadto50: LET’S MAKE SOME NOISE (5 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/93',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-20',
+        title: 'CFP 2111-20: DeFiChain.Info - News, Social media, Education, Bringing DeFiChain to .NET (20 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/94',
+        type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2111-21',
+        title: 'CFP 2111-21: DeFiChain Brave Campaign (13 800 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/95',
+        type: 'CFP'),
   ];
 
   @override
   void initState() {
     super.initState();
+
+    String home = "";
+    Map<String, String> envVars = Platform.environment;
+
+    if (Platform.isMacOS) {
+      home = envVars['HOME'];
+    } else if (Platform.isLinux) {
+      home = envVars['HOME'];
+    } else if (Platform.isWindows) {
+      home = envVars['UserProfile'];
+    }
+
+    if (Platform.isMacOS) {
+      filePathConfig = home + '/.defi/defi.conf';
+    }
+
+    loadConfig();
+  }
+
+  void loadConfig() async
+  {
+    if (await File(filePathConfig).exists()) {
+      new File(filePathConfig).readAsLines()
+          .then((lines) => new Config.fromStrings(lines))
+          .then((Config config) => {
+              setState(() {
+                _usernameController.text = config.defaults()["rpcuser"];
+                _passwordController.text = config.defaults()["rpcpassword"];
+              })
+          });
+    }
   }
 
   void listMasterNodes() async {
