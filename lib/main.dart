@@ -216,47 +216,21 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _masterNodesLoaded = false;
 
   var dfips = [
+    new Proposal(id: 'dfip-2111-a', title: 'DFIP 2111-A: Adding liquidity pool Luna/Dfi', github: 'https://github.com/DeFiCh/dfips/issues/79', type: 'DFIP'),
     new Proposal(
-        id: 'dfip-2111-a',
-        title: 'DFIP 2111-A: Adding liquidity pool Luna/Dfi',
-        github: 'https://github.com/DeFiCh/dfips/issues/79',
-        type: 'DFIP'),
+        id: 'dfip-2111-B', title: 'DFIP 2111-B: Vote of confidence: Ethereum Virtual Machine (EVM) Support', github: 'https://github.com/DeFiCh/dfips/issues/96', type: 'CFP'),
+    new Proposal(id: 'cfp-2111-01', title: 'CFP 2111-01: defichain-history - Visualize Pool Data (25 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/74', type: 'CFP'),
     new Proposal(
-        id: 'dfip-2111-B',
-        title: 'DFIP 2111-B: Vote of confidence: Ethereum Virtual Machine (EVM) Support',
-        github: 'https://github.com/DeFiCh/dfips/issues/96',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-01',
-        title: 'CFP 2111-01: defichain-history - Visualize Pool Data (25 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/74',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-02',
-        title: 'CFP 2111-02: Vault and loan monitor with enhanced notifications (45 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/75',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-03',
-        title: 'CFP 2111-03: DeFiChain Society Foundation (20 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/76',
-        type: 'CFP'),
+        id: 'cfp-2111-02', title: 'CFP 2111-02: Vault and loan monitor with enhanced notifications (45 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/75', type: 'CFP'),
+    new Proposal(id: 'cfp-2111-03', title: 'CFP 2111-03: DeFiChain Society Foundation (20 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/76', type: 'CFP'),
     new Proposal(
         id: 'cfp-2111-04',
         title: 'CFP 2111-04: Spanish and French translation for Desktop, Mobile APP and Website during 1 year (5 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/77',
         type: 'CFP'),
+    new Proposal(id: 'cfp-2111-05', title: 'CFP 2111-05: DFI.TAX (24 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/78', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-05',
-        title: 'CFP 2111-05: DFI.TAX (24 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/78',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-06',
-        title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/60',
-        type: 'CFP',
-        defaultValue: true),
+        id: 'cfp-2111-06', title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/60', type: 'CFP', defaultValue: true),
     new Proposal(
         id: 'cfp-2111-07',
         title: 'CFP 2111-07: saiive.live iOS/Mac Store Release + Apple Watch (10 000 DFI)',
@@ -278,61 +252,34 @@ class _MyHomePageState extends State<MyHomePage> {
         title: 'CFP 2111-10: DFX Masternode service – Free of charge on- and off-ramp and automatic transaction service for Masternode operators (60 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/84',
         type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-11',
-        title: 'CFP 2111-11: DFX Smartphone App (40 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/85',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-12',
-        title: 'CFP 2111-12: DeFiChain NFTs for the DeFiChain Community (3 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/86',
-        type: 'CFP'),
+    new Proposal(id: 'cfp-2111-11', title: 'CFP 2111-11: DFX Smartphone App (40 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/85', type: 'CFP'),
+    new Proposal(id: 'cfp-2111-12', title: 'CFP 2111-12: DeFiChain NFTs for the DeFiChain Community (3 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/86', type: 'CFP'),
     new Proposal(
         id: 'cfp-2111-13',
         title: 'CFP 2111-13: Boost the defichain testnet infrastructure for a better testing and improved future product integration testing capabilities (35 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/87',
         type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-14',
-        title: 'CFP 2111-14: DeFined designed - DeFiNode 3D printing service (13 100 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/88',
-        type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-15',
-        title: 'CFP 2111-15: DefichainGaS" your Giveawayservice (1 500 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/89',
-        type: 'CFP'),
+        id: 'cfp-2111-14', title: 'CFP 2111-14: DeFined designed - DeFiNode 3D printing service (13 100 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/88', type: 'CFP'),
+    new Proposal(id: 'cfp-2111-15', title: 'CFP 2111-15: DefichainGaS" your Giveawayservice (1 500 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/89', type: 'CFP'),
     new Proposal(
         id: 'cfp-2111-16',
         title: 'CFP 2111-16: Non-custodial, Decentralised Chain-Interoperability and Funds-Transfer Solution Between DeFiChain and the Ethereum Ecosystem (100 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/90',
         type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-17',
-        title: 'CFP 2111-17: DeFiChain Promo — January to June 2022 (10 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/91',
-        type: 'CFP'),
+    new Proposal(id: 'cfp-2111-17', title: 'CFP 2111-17: DeFiChain Promo — January to June 2022 (10 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/91', type: 'CFP'),
     new Proposal(
         id: 'cfp-2111-18',
         title: 'CFP 2111-18: IT’S ABOUT MARKETING: making DeFiChain INTERNATIONAL (40 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/92',
         type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-19',
-        title: 'CFP 2111-19: #roadto50: LET’S MAKE SOME NOISE (5 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/93',
-        type: 'CFP'),
+    new Proposal(id: 'cfp-2111-19', title: 'CFP 2111-19: #roadto50: LET’S MAKE SOME NOISE (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/93', type: 'CFP'),
     new Proposal(
         id: 'cfp-2111-20',
         title: 'CFP 2111-20: DeFiChain.Info - News, Social media, Education, Bringing DeFiChain to .NET (20 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/94',
         type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-21',
-        title: 'CFP 2111-21: DeFiChain Brave Campaign (13 800 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/95',
-        type: 'CFP'),
+    new Proposal(id: 'cfp-2111-21', title: 'CFP 2111-21: DeFiChain Brave Campaign (13 800 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/95', type: 'CFP'),
   ];
 
   @override
@@ -352,21 +299,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
     if (Platform.isMacOS) {
       filePathConfig = home + '/.defi/defi.conf';
+    } else if (Platform.isWindows) {
+      filePathConfig = home + '/.defi/defi.conf';
     }
 
     loadConfig();
   }
 
-  void loadConfig() async
-  {
+  void loadConfig() async {
     if (await File(filePathConfig).exists()) {
-      new File(filePathConfig).readAsLines()
-          .then((lines) => new Config.fromStrings(lines))
-          .then((Config config) => {
-              setState(() {
-                _usernameController.text = config.defaults()["rpcuser"];
-                _passwordController.text = config.defaults()["rpcpassword"];
-              })
+      new File(filePathConfig).readAsLines().then((lines) => new Config.fromStrings(lines)).then((Config config) => {
+            setState(() {
+              _usernameController.text = config.defaults()["rpcuser"];
+              _passwordController.text = config.defaults()["rpcpassword"];
+            })
           });
     }
   }
