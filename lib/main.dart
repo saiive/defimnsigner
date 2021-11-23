@@ -230,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
         type: 'CFP'),
     new Proposal(id: 'cfp-2111-05', title: 'CFP 2111-05: DFI.TAX (24 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/78', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-06', title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/60', type: 'CFP', defaultValue: true),
+        id: 'cfp-2111-06', title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/80', type: 'CFP', defaultValue: true),
     new Proposal(
         id: 'cfp-2111-07',
         title: 'CFP 2111-07: saiive.live iOS/Mac Store Release + Apple Watch (10 000 DFI)',
