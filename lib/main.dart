@@ -370,7 +370,13 @@ class _MyHomePageState extends State<MyHomePage> {
         _myMasterNodes = _myMasterNodes;
         _masterNodesLoaded = true;
       });
+
+      overlay.hide();
+      streamController.close();
     } catch (e) {
+      overlay.hide();
+      streamController.close();
+      _masterNodesLoaded = true;
       showDialog<String>(
           context: context,
           builder: (BuildContext context) => AlertDialog(
@@ -384,9 +390,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ));
     } finally {
-      overlay.hide();
-      streamController.close();
-      _masterNodesLoaded = true;
+
     }
   }
 
