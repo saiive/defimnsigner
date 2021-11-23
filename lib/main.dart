@@ -218,7 +218,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var dfips = [
     new Proposal(id: 'dfip-2111-a', title: 'DFIP 2111-A: Adding liquidity pool Luna/Dfi', github: 'https://github.com/DeFiCh/dfips/issues/79', type: 'DFIP'),
     new Proposal(
-        id: 'dfip-2111-B', title: 'DFIP 2111-B: Vote of confidence: Ethereum Virtual Machine (EVM) Support', github: 'https://github.com/DeFiCh/dfips/issues/96', type: 'CFP'),
+        id: 'dfip-2111-b', title: 'DFIP 2111-B: Vote of confidence: Ethereum Virtual Machine (EVM) Support', github: 'https://github.com/DeFiCh/dfips/issues/96', type: 'CFP'),
     new Proposal(id: 'cfp-2111-01', title: 'CFP 2111-01: defichain-history - Visualize Pool Data (25 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/74', type: 'CFP'),
     new Proposal(
         id: 'cfp-2111-02', title: 'CFP 2111-02: Vault and loan monitor with enhanced notifications (45 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/75', type: 'CFP'),
