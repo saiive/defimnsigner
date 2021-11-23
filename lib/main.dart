@@ -342,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (address is List<dynamic>) {
           for (var addressEl in (address as List<dynamic>)) {
             var add = (addressEl as List<dynamic>).first.toString();
-            if (add.startsWith('8') || add.startsWith('m')) addressList.add(add);
+            if (add.startsWith('8')) addressList.add(add);
           }
         }
       }
