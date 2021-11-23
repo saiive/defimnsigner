@@ -28,11 +28,11 @@ class Proposal {
   String title;
   String github;
   String type;
-  bool result = null;
+  Votes result = Votes.NO_VOTE;
 
-  bool defaultValue = false;
+  Votes defaultValue = Votes.NO_VOTE;
 
-  Proposal({@required this.id, @required this.title, @required this.github, @required this.type, this.defaultValue}) {
+  Proposal({@required this.id, @required this.title, @required this.github, @required this.type, this.defaultValue = Votes.NO_VOTE}) {
     this.result = defaultValue;
   }
 }
@@ -201,6 +201,13 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+enum Votes {
+  YES,
+  NO,
+  NEUTRAL,
+  NO_VOTE
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   var _addressController = TextEditingController(text: 'http://127.0.0.1:8555/');
   var _usernameController = TextEditingController(text: '');
@@ -230,13 +237,13 @@ class _MyHomePageState extends State<MyHomePage> {
         type: 'CFP'),
     new Proposal(id: 'cfp-2111-05', title: 'CFP 2111-05: DFI.TAX (24 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/78', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-06', title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/80', type: 'CFP', defaultValue: true),
+        id: 'cfp-2111-06', title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/80', type: 'CFP', defaultValue: Votes.YES),
     new Proposal(
         id: 'cfp-2111-07',
         title: 'CFP 2111-07: saiive.live iOS/Mac Store Release + Apple Watch (10 000 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/81',
         type: 'CFP',
-        defaultValue: true),
+        defaultValue: Votes.YES),
     new Proposal(
         id: 'cfp-2111-08',
         title: 'CFP 2111-08: Establish a Platform for virtual Community Meetups to better connect the Community (20 000 DFI)',
@@ -335,7 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (address is List<dynamic>) {
           for (var addressEl in (address as List<dynamic>)) {
             var add = (addressEl as List<dynamic>).first.toString();
-            if (add.startsWith("8")) addressList.add(add);
+            if (add.startsWith('8')) addressList.add(add);
           }
         }
       }
@@ -432,32 +439,63 @@ class _MyHomePageState extends State<MyHomePage> {
     _signedMessages = [];
 
     for (var proposal in dfips) {
+      if (proposal.result == Votes.NO_VOTE) {
+        continue;
+      }
+
       _signedMessages.add('=========================');
       _signedMessages.add('');
-      _signedMessages.add(proposal.github);
+      _signedMessages.add(proposal.id + ': ' + proposal.github);
       _signedMessages.add('');
       _signedMessages.add('');
-      if (proposal.result != null) {
-        for (var mn in _myMasterNodes) {
-          var message = proposal.id + "-" + (proposal.result ? "yes" : "no");
+      for (var mn in _myMasterNodes) {
+        var result = "yes";
 
-          _signedMessages.add('\$ defi-cli signmessage ' + mn['ownerAuthAddress'] + " " + message);
-          _signedMessages.add(await signMessage(mn['ownerAuthAddress'], message));
+        if (proposal.result == Votes.YES) {
+          result = "yes";
         }
-      } else {
-        _signedMessages.add('NO VOTE');
-        _signedMessages.add('');
+        else if (proposal.result == Votes.NO) {
+          result = "no";
+        }
+        else if (proposal.result == Votes.NEUTRAL) {
+          result = "neutral";
+        }
+
+        var message = proposal.id + "-" + result;
+
+        _signedMessages.add(
+            '\$ defi-cli signmessage ' + mn['ownerAuthAddress'] + " " +
+                message);
+        _signedMessages.add(await signMessage(mn['ownerAuthAddress'], message));
       }
 
       _signedMessages.add('=========================');
     }
+    _signedText = _signedMessages.join('\n');
 
-    setState(() {
-      _signedMessages = _signedMessages;
-      _signedText = _signedMessages.join('\n');
-    });
+    AlertDialog resultDialog = AlertDialog(
+      title: Center(child: Text("Sign Result")),
+      content: Center(
+          child: Column(children: [
+            Expanded(flex: 1, child: Padding(padding: EdgeInsets.all(10), child: SizedBox(height: 300, child: SingleChildScrollView(child: SelectableText(_signedText)))))
+          ])),
+        actions: [ElevatedButton(
+          child: Text("Close"),
+          onPressed: () async {
+            Navigator.of(context).pop();
+          },
+        )]
+    );
 
     overlay.hide();
+
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return resultDialog;
+      },
+    );
   }
 
   dynamic signMessage(String owner, String message) {
@@ -494,132 +532,175 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  allVotes(Votes vote) {
+    setState(() {
+      dfips.forEach((element) {element.result = vote;});
+    });
+  }
+
   openProposalLink(BuildContext context, Proposal proposal) async {
     await launch(proposal.github);
   }
 
   @override
   Widget build(BuildContext context) {
-    var scrollView = CustomScrollView(
-      slivers: <Widget>[
-        SliverToBoxAdapter(
-          child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                margin: EdgeInsets.only(top: 10.0),
-                child: Row(children: [
-                  Expanded(
-                      flex: 1,
-                      child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: SizedBox(
-                              height: 300,
-                              child: Scrollbar(
-                                  child: ListView(shrinkWrap: true, children: [
-                                ListView.builder(
-                                    physics: BouncingScrollPhysics(),
-                                    scrollDirection: Axis.vertical,
-                                    shrinkWrap: true,
-                                    itemCount: _myMasterNodes.length,
-                                    itemBuilder: (context, index) {
-                                      var mn = _myMasterNodes.elementAt(index);
-                                      return SelectableText(mn['ownerAuthAddress'] ?? '');
-                                    })
-                              ]))))),
-                  Expanded(flex: 1, child: Padding(padding: EdgeInsets.all(10), child: SizedBox(height: 300, child: Scrollbar(child: SelectableText(_signedText))))),
-                  Expanded(
-                      flex: 1,
-                      child: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Column(children: [
-                            Text('Address for donations:'),
-                            SelectableText('dResgN7szqZ6rysYbbj2tUmqjcGHD4LmKs'),
-                            TextField(
-                              controller: _addressController,
-                              decoration: InputDecoration(hintText: 'RPC Address'),
-                            ),
-                            TextField(
-                              controller: _usernameController,
-                              decoration: InputDecoration(hintText: 'RPC Username'),
-                            ),
-                            TextField(
-                              controller: _passwordController,
-                              decoration: InputDecoration(hintText: 'RPC Password'),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            ElevatedButton(onPressed: listMasterNodes, child: Text('LoadMasterNodes')),
-                            Padding(padding: EdgeInsets.only(top: 10)),
-                            ElevatedButton(onPressed: _masterNodesLoaded ? signMessageCfpsWithAlert : null, child: Text('Sign'))
-                          ])))
-                ]),
-              )),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              final account = dfips[index];
-              return new Column(children: [
-                GestureDetector(
-                  child: Text(account.title),
-                  onTap: () async {
-                    await openProposalLink(context, account);
-                  },
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    new Radio(
-                      value: true,
-                      groupValue: account.result,
-                      onChanged: (var value) {
-                        setState(() {
-                          account.result = true;
-                        });
-                      },
-                    ),
-                    new Text(
-                      'Yes',
-                      style: new TextStyle(fontSize: 16.0),
-                    ),
-                    new Radio(
-                      value: false,
-                      groupValue: account.result,
-                      onChanged: (var value) {
-                        setState(() {
-                          account.result = false;
-                        });
-                      },
-                    ),
-                    new Text(
-                      'No',
-                      style: new TextStyle(
-                        fontSize: 16.0,
+    var body = FocusTraversalGroup(policy: OrderedTraversalPolicy(), child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 3,
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: CustomScrollView(slivers: [
+              SliverToBoxAdapter(child: Padding(padding: EdgeInsets.only(top: 10, left: 10, right: 10), child: Row(children: [
+                ElevatedButton(onPressed: () => {allVotes(Votes.YES)}, child: Text('All YES')),
+                Container(width: 5),
+                ElevatedButton(onPressed: () => {allVotes(Votes.NO)}, child: Text('All NO')),
+                Container(width: 5),
+                ElevatedButton(onPressed: () => {allVotes(Votes.NEUTRAL)}, child: Text('All Neutral')),
+                Container(width: 5),
+                ElevatedButton(onPressed: () => {allVotes(Votes.NO_VOTE)}, child: Text('All NO VOTE')),
+              ]))),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    final account = dfips[index];
+                    return Padding(padding: EdgeInsets.all(10), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      GestureDetector(
+                        child: Text(' (' + account.id + ') ' + account.title),
+                        onTap: () async {
+                          await openProposalLink(context, account);
+                        },
                       ),
-                    ),
-                  ],
-                )
-              ]);
-            },
-            childCount: dfips.length,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          new Radio(
+                            value: Votes.YES,
+                            groupValue: account.result,
+                            onChanged: (var value) {
+                              setState(() {
+                                account.result = Votes.YES;
+                              });
+                            },
+                          ),
+                          new Text(
+                            'Yes',
+                            style: new TextStyle(fontSize: 16.0),
+                          ),
+                          new Radio(
+                            value: Votes.NO,
+                            groupValue: account.result,
+                            onChanged: (var value) {
+                              setState(() {
+                                account.result = Votes.NO;
+                              });
+                            },
+                          ),
+                          new Text(
+                            'No',
+                            style: new TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          new Radio(
+                            value: Votes.NEUTRAL,
+                            groupValue: account.result,
+                            onChanged: (var value) {
+                              setState(() {
+                                account.result = Votes.NEUTRAL;
+                              });
+                            },
+                          ),
+                          new Text(
+                            'Neutral',
+                            style: new TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                          new Radio(
+                            value: Votes.NO_VOTE,
+                            groupValue: account.result,
+                            onChanged: (var value) {
+                              setState(() {
+                                account.result = Votes.NO_VOTE;
+                              });
+                            },
+                          ),
+                          new Text(
+                            'No Vote',
+                            style: new TextStyle(
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ],
+                      )
+                    ]));
+                  },
+                  childCount: dfips.length,
+                ),
+              )
+            ])
           ),
         ),
-        SliverToBoxAdapter(
-          child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                margin: EdgeInsets.only(top: 10.0),
-                child: Column(children: []),
-              )),
+        LimitedBox(
+          maxWidth: 350,
+          child: Container(
+            height: MediaQuery.of(context).size.height,
+            child: CustomScrollView(slivers: [
+              SliverToBoxAdapter(child:
+              Padding(
+                  padding: EdgeInsets.all(10),
+                  child:  FocusTraversalOrder(
+                      order: NumericFocusOrder(2.0),
+                      child: Column(children: [
+                    Text('Address for donations:'),
+                    SelectableText('dResgN7szqZ6rysYbbj2tUmqjcGHD4LmKs'),
+                    TextField(
+                      controller: _addressController,
+                      decoration: InputDecoration(hintText: 'RPC Address'),
+                    ),
+                    TextField(
+                      controller: _usernameController,
+                      decoration: InputDecoration(hintText: 'RPC Username'),
+                    ),
+                    TextField(
+                      controller: _passwordController,
+                      decoration: InputDecoration(hintText: 'RPC Password'),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    ElevatedButton(onPressed: listMasterNodes, child: Text('LoadMasterNodes')),
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    ElevatedButton(onPressed: _masterNodesLoaded && _myMasterNodes.length > 0 ? signMessageCfpsWithAlert : null, child: Text('Sign'))
+                  ])))
+              ),
+              SliverToBoxAdapter(child: Padding(
+              padding: EdgeInsets.all(10), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text('Your Masternodes', style: Theme.of(context).textTheme.headline3),
+                _myMasterNodes.length > 0 ? ListView(shrinkWrap: true, children: [
+                            ListView.builder(
+                                physics: BouncingScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                itemCount: _myMasterNodes.length,
+                                itemBuilder: (context, index) {
+                                  var mn = _myMasterNodes.elementAt(index);
+                                  return SelectableText(mn['ownerAuthAddress'] ?? '');
+                                })
+                          ]) : Text('No Masternods found')])))
+            ])
+          ),
         ),
       ],
-    );
+    ));
 
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: LayoutBuilder(builder: (_, builder) {
-        return scrollView;
+        return body;
       }),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: _incrementCounter,
