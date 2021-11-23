@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:window_size/window_size.dart';
 import 'package:ini/ini.dart';
 
-const String APP_TITLE = "saiive.signer - 2109 DefiChain Masternode DFIP/CFP Signer";
+const String APP_TITLE = "saiive.signer - 2111 DefiChain Masternode DFIP/CFP Signer";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
