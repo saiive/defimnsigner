@@ -9,7 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:window_size/window_size.dart';
 import 'package:ini/ini.dart';
 
-const String APP_TITLE = "saiive.signer - 2111 DefiChain Masternode DFIP/CFP Signer";
+const String APP_TITLE = "saiive.signer - 2202 DefiChain Masternode DFIP/CFP Signer";
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -201,12 +201,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-enum Votes {
-  YES,
-  NO,
-  NEUTRAL,
-  NO_VOTE
-}
+enum Votes { YES, NO, NEUTRAL, NO_VOTE }
 
 class _MyHomePageState extends State<MyHomePage> {
   var _addressController = TextEditingController(text: 'http://127.0.0.1:8555/');
@@ -223,70 +218,61 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _masterNodesLoaded = false;
 
   var dfips = [
-    new Proposal(id: 'dfip-2111-a', title: 'DFIP 2111-A: Adding liquidity pool Luna/Dfi', github: 'https://github.com/DeFiCh/dfips/issues/79', type: 'DFIP'),
+    new Proposal(id: 'dfip-2202-a', title: 'DFIP-2202-A: Deposit of a Masternode as security for a loan', github: 'https://github.com/DeFiCh/dfips/issues/107', type: 'DFIP'),
     new Proposal(
-        id: 'dfip-2111-b', title: 'DFIP 2111-B: Vote of confidence: Ethereum Virtual Machine (EVM) Support', github: 'https://github.com/DeFiCh/dfips/issues/96', type: 'CFP'),
-    new Proposal(id: 'cfp-2111-01', title: 'CFP 2111-01: defichain-history - Visualize Pool Data (25 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/74', type: 'CFP'),
+        id: 'dfip-2202-b',
+        title: 'DFIP-2202-B: Invest 50% of DeFiChain\'s BTC/ETH/USDC/USDT Collateral in Cake\'s Lending Services',
+        github: 'https://github.com/DeFiCh/dfips/issues/109',
+        type: 'DFIP'),
     new Proposal(
-        id: 'cfp-2111-02', title: 'CFP 2111-02: Vault and loan monitor with enhanced notifications (45 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/75', type: 'CFP'),
-    new Proposal(id: 'cfp-2111-03', title: 'CFP 2111-03: DeFiChain Society Foundation (20 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/76', type: 'CFP'),
+        id: 'dfip-2202-c',
+        title: 'DFIP-2202-C: Vault | Collateralization Ratio to 125% / Interest Rate to 10% APR',
+        github: 'https://github.com/DeFiCh/dfips/issues/112',
+        type: 'DFIP'),
     new Proposal(
-        id: 'cfp-2111-04',
-        title: 'CFP 2111-04: Spanish and French translation for Desktop, Mobile APP and Website during 1 year (5 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/77',
-        type: 'CFP'),
-    new Proposal(id: 'cfp-2111-05', title: 'CFP 2111-05: DFI.TAX (24 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/78', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-06', title: 'CFP 2111-06: saiive.live - New Features (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/80', type: 'CFP', defaultValue: Votes.YES),
-    new Proposal(
-        id: 'cfp-2111-07',
-        title: 'CFP 2111-07: saiive.live iOS/Mac Store Release + Apple Watch (10 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/81',
+        id: 'cfp-2202-01',
+        title: 'CFP-2202-01: saiive.live Loans, Stocks, Composite Swap and Auctions (50 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/104',
         type: 'CFP',
         defaultValue: Votes.YES),
     new Proposal(
-        id: 'cfp-2111-08',
-        title: 'CFP 2111-08: Establish a Platform for virtual Community Meetups to better connect the Community (20 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/82',
-        type: 'CFP'),
+        id: 'cfp-2202-02',
+        title: 'CFP-2202-02: saiive.live Infrastructure & employee payout (15 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/105',
+        type: 'CFP',
+        defaultValue: Votes.YES),
+    new Proposal(id: 'cfp-2202-03', title: 'CFP-2202-03: Liquidity Pool partnership for BSC (20 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/106', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-09',
-        title: 'CFP 2111-09: Expansion of the DeFiChain Community to Spanish-speaking countries (5 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/83',
+        id: 'cfp-2202-04',
+        title: 'CFP-2202-04: Marketing - bring DFI to the German and English speaking countries (25 000 DFI) ',
+        github: 'https://github.com/DeFiCh/dfips/issues/108',
         type: 'CFP'),
+    new Proposal(id: 'cfp-2202-05', title: 'CFP-2202-05: Telegram Moderators (10 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/110', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-10',
-        title: 'CFP 2111-10: DFX Masternode service – Free of charge on- and off-ramp and automatic transaction service for Masternode operators (60 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/84',
+        id: 'cfp-2202-06', title: 'CFP-2202-06: Trading Wallet & Tool Set for dStocks Trading (75 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/111', type: 'CFP'),
+    new Proposal(id: 'cfp-2202-07', title: 'CFP-2202-07: DeFiChain NFTs (750 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/113', type: 'CFP'),
+    new Proposal(id: 'cfp-2202-08', title: 'CFP-2202-08: APOLLO MISSION - 1 (646 251 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/114', type: 'CFP'),
+    new Proposal(id: 'cfp-2202-09', title: 'CFP-2202-09: APOLLO MISSION - 2 (217 178 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/115', type: 'CFP'),
+    new Proposal(id: 'cfp-2202-10', title: 'CFP-2202-10: APOLLO MISSION - 3 (51 473 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/116', type: 'CFP'),
+    new Proposal(id: 'cfp-2202-11', title: 'CFP-2202-11: APOLLO MISSION - 4 (12 410 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/117', type: 'CFP'),
+    new Proposal(
+        id: 'cfp-2202-12',
+        title: 'CFP-2202-12: Defichain Chrome Extension - New features [option 2] (3 200 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/118',
         type: 'CFP'),
-    new Proposal(id: 'cfp-2111-11', title: 'CFP 2111-11: DFX Smartphone App (40 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/85', type: 'CFP'),
-    new Proposal(id: 'cfp-2111-12', title: 'CFP 2111-12: DeFiChain NFTs for the DeFiChain Community (3 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/86', type: 'CFP'),
+    new Proposal(id: 'cfp-2202-13', title: 'CFP-2202-13: Defichain Chrome Extension - Long term (20 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/119', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-13',
-        title: 'CFP 2111-13: Boost the defichain testnet infrastructure for a better testing and improved future product integration testing capabilities (35 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/87',
+        id: 'cfp-2202-14',
+        title: 'CFP-2202-14: Bounty DeFichain atomic swap exploit (1 000 000 DFI) and finder\'s reward',
+        github: 'https://github.com/DeFiCh/dfips/issues/120',
         type: 'CFP'),
+    new Proposal(id: 'cfp-2202-15', title: 'CFP-2202-15: DeFiChain bug bounty fund pre-allocation (50 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/121', type: 'CFP'),
+    new Proposal(id: 'cfp-2202-16', title: 'CFP-2202-16: DeFiChain Core Developer (25 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/122', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2111-14', title: 'CFP 2111-14: DeFined designed - DeFiNode 3D printing service (13 100 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/88', type: 'CFP'),
-    new Proposal(id: 'cfp-2111-15', title: 'CFP 2111-15: DefichainGaS" your Giveawayservice (1 500 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/89', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-16',
-        title: 'CFP 2111-16: Non-custodial, Decentralised Chain-Interoperability and Funds-Transfer Solution Between DeFiChain and the Ethereum Ecosystem (100 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/90',
+        id: 'cfp-2202-17',
+        title: 'CFP-2202-17: Defichain Value - New features and ongoing maintenance (12 000 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/123',
         type: 'CFP'),
-    new Proposal(id: 'cfp-2111-17', title: 'CFP 2111-17: DeFiChain Promo — January to June 2022 (10 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/91', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-18',
-        title: 'CFP 2111-18: IT’S ABOUT MARKETING: making DeFiChain INTERNATIONAL (40 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/92',
-        type: 'CFP'),
-    new Proposal(id: 'cfp-2111-19', title: 'CFP 2111-19: #roadto50: LET’S MAKE SOME NOISE (5 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/93', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2111-20',
-        title: 'CFP 2111-20: DeFiChain.Info - News, Social media, Education, Bringing DeFiChain to .NET (20 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/94',
-        type: 'CFP'),
-    new Proposal(id: 'cfp-2111-21', title: 'CFP 2111-21: DeFiChain Brave Campaign (13 800 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/95', type: 'CFP'),
   ];
 
   @override
@@ -396,9 +382,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ));
-    } finally {
-
-    }
+    } finally {}
   }
 
   void signMessageCfpsWithAlert() async {
@@ -453,19 +437,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
         if (proposal.result == Votes.YES) {
           result = "yes";
-        }
-        else if (proposal.result == Votes.NO) {
+        } else if (proposal.result == Votes.NO) {
           result = "no";
-        }
-        else if (proposal.result == Votes.NEUTRAL) {
+        } else if (proposal.result == Votes.NEUTRAL) {
           result = "neutral";
         }
 
         var message = proposal.id + "-" + result;
 
-        _signedMessages.add(
-            '\$ defi-cli signmessage ' + mn['ownerAuthAddress'] + " " +
-                message);
+        _signedMessages.add('\$ defi-cli signmessage ' + mn['ownerAuthAddress'] + " " + message);
         _signedMessages.add(await signMessage(mn['ownerAuthAddress'], message));
       }
 
@@ -474,18 +454,19 @@ class _MyHomePageState extends State<MyHomePage> {
     _signedText = _signedMessages.join('\n');
 
     AlertDialog resultDialog = AlertDialog(
-      title: Center(child: Text("Sign Result")),
-      content: Center(
-          child: Column(children: [
-            Expanded(flex: 1, child: Padding(padding: EdgeInsets.all(10), child: SizedBox(height: 300, child: SingleChildScrollView(child: SelectableText(_signedText)))))
-          ])),
-        actions: [ElevatedButton(
-          child: Text("Close"),
-          onPressed: () async {
-            Navigator.of(context).pop();
-          },
-        )]
-    );
+        title: Center(child: Text("Sign Result")),
+        content: Center(
+            child: Column(children: [
+          Expanded(flex: 1, child: Padding(padding: EdgeInsets.all(10), child: SizedBox(height: 300, child: SingleChildScrollView(child: SelectableText(_signedText)))))
+        ])),
+        actions: [
+          ElevatedButton(
+            child: Text("Close"),
+            onPressed: () async {
+              Navigator.of(context).pop();
+            },
+          )
+        ]);
 
     overlay.hide();
 
@@ -534,7 +515,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   allVotes(Votes vote) {
     setState(() {
-      dfips.forEach((element) {element.result = vote;});
+      dfips.forEach((element) {
+        element.result = vote;
+      });
     });
   }
 
@@ -544,156 +527,165 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var body = FocusTraversalGroup(policy: OrderedTraversalPolicy(), child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          flex: 3,
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: CustomScrollView(slivers: [
-              SliverToBoxAdapter(child: Padding(padding: EdgeInsets.only(top: 10, left: 10, right: 10), child: Row(children: [
-                ElevatedButton(onPressed: () => {allVotes(Votes.YES)}, child: Text('All YES')),
-                Container(width: 5),
-                ElevatedButton(onPressed: () => {allVotes(Votes.NO)}, child: Text('All NO')),
-                Container(width: 5),
-                ElevatedButton(onPressed: () => {allVotes(Votes.NEUTRAL)}, child: Text('All Neutral')),
-                Container(width: 5),
-                ElevatedButton(onPressed: () => {allVotes(Votes.NO_VOTE)}, child: Text('All NO VOTE')),
-              ]))),
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                    final account = dfips[index];
-                    return Padding(padding: EdgeInsets.all(10), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      GestureDetector(
-                        child: Text(' (' + account.id + ') ' + account.title),
-                        onTap: () async {
-                          await openProposalLink(context, account);
+    var body = FocusTraversalGroup(
+        policy: OrderedTraversalPolicy(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: CustomScrollView(slivers: [
+                    SliverToBoxAdapter(
+                        child: Padding(
+                            padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                            child: Row(children: [
+                              ElevatedButton(onPressed: () => {allVotes(Votes.YES)}, child: Text('All YES')),
+                              Container(width: 5),
+                              ElevatedButton(onPressed: () => {allVotes(Votes.NO)}, child: Text('All NO')),
+                              Container(width: 5),
+                              ElevatedButton(onPressed: () => {allVotes(Votes.NEUTRAL)}, child: Text('All Neutral')),
+                              Container(width: 5),
+                              ElevatedButton(onPressed: () => {allVotes(Votes.NO_VOTE)}, child: Text('All NO VOTE')),
+                            ]))),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          final account = dfips[index];
+                          return Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                                GestureDetector(
+                                  child: Text(' (' + account.id + ') ' + account.title),
+                                  onTap: () async {
+                                    await openProposalLink(context, account);
+                                  },
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    new Radio(
+                                      value: Votes.YES,
+                                      groupValue: account.result,
+                                      onChanged: (var value) {
+                                        setState(() {
+                                          account.result = Votes.YES;
+                                        });
+                                      },
+                                    ),
+                                    new Text(
+                                      'Yes',
+                                      style: new TextStyle(fontSize: 16.0),
+                                    ),
+                                    new Radio(
+                                      value: Votes.NO,
+                                      groupValue: account.result,
+                                      onChanged: (var value) {
+                                        setState(() {
+                                          account.result = Votes.NO;
+                                        });
+                                      },
+                                    ),
+                                    new Text(
+                                      'No',
+                                      style: new TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    new Radio(
+                                      value: Votes.NEUTRAL,
+                                      groupValue: account.result,
+                                      onChanged: (var value) {
+                                        setState(() {
+                                          account.result = Votes.NEUTRAL;
+                                        });
+                                      },
+                                    ),
+                                    new Text(
+                                      'Neutral',
+                                      style: new TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                    new Radio(
+                                      value: Votes.NO_VOTE,
+                                      groupValue: account.result,
+                                      onChanged: (var value) {
+                                        setState(() {
+                                          account.result = Votes.NO_VOTE;
+                                        });
+                                      },
+                                    ),
+                                    new Text(
+                                      'No Vote',
+                                      style: new TextStyle(
+                                        fontSize: 16.0,
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ]));
                         },
+                        childCount: dfips.length,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          new Radio(
-                            value: Votes.YES,
-                            groupValue: account.result,
-                            onChanged: (var value) {
-                              setState(() {
-                                account.result = Votes.YES;
-                              });
-                            },
-                          ),
-                          new Text(
-                            'Yes',
-                            style: new TextStyle(fontSize: 16.0),
-                          ),
-                          new Radio(
-                            value: Votes.NO,
-                            groupValue: account.result,
-                            onChanged: (var value) {
-                              setState(() {
-                                account.result = Votes.NO;
-                              });
-                            },
-                          ),
-                          new Text(
-                            'No',
-                            style: new TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          new Radio(
-                            value: Votes.NEUTRAL,
-                            groupValue: account.result,
-                            onChanged: (var value) {
-                              setState(() {
-                                account.result = Votes.NEUTRAL;
-                              });
-                            },
-                          ),
-                          new Text(
-                            'Neutral',
-                            style: new TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                          new Radio(
-                            value: Votes.NO_VOTE,
-                            groupValue: account.result,
-                            onChanged: (var value) {
-                              setState(() {
-                                account.result = Votes.NO_VOTE;
-                              });
-                            },
-                          ),
-                          new Text(
-                            'No Vote',
-                            style: new TextStyle(
-                              fontSize: 16.0,
-                            ),
-                          ),
-                        ],
-                      )
-                    ]));
-                  },
-                  childCount: dfips.length,
-                ),
-              )
-            ])
-          ),
-        ),
-        LimitedBox(
-          maxWidth: 350,
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: CustomScrollView(slivers: [
-              SliverToBoxAdapter(child:
-              Padding(
-                  padding: EdgeInsets.all(10),
-                  child:  FocusTraversalOrder(
-                      order: NumericFocusOrder(2.0),
-                      child: Column(children: [
-                    Text('Address for donations:'),
-                    SelectableText('dResgN7szqZ6rysYbbj2tUmqjcGHD4LmKs'),
-                    TextField(
-                      controller: _addressController,
-                      decoration: InputDecoration(hintText: 'RPC Address'),
-                    ),
-                    TextField(
-                      controller: _usernameController,
-                      decoration: InputDecoration(hintText: 'RPC Username'),
-                    ),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(hintText: 'RPC Password'),
-                    ),
-                    Padding(padding: EdgeInsets.only(top: 10)),
-                    ElevatedButton(onPressed: listMasterNodes, child: Text('LoadMasterNodes')),
-                    Padding(padding: EdgeInsets.only(top: 10)),
-                    ElevatedButton(onPressed: _masterNodesLoaded && _myMasterNodes.length > 0 ? signMessageCfpsWithAlert : null, child: Text('Sign'))
-                  ])))
-              ),
-              SliverToBoxAdapter(child: Padding(
-              padding: EdgeInsets.all(10), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Your Masternodes', style: Theme.of(context).textTheme.headline3),
-                _myMasterNodes.length > 0 ? ListView(shrinkWrap: true, children: [
-                            ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: _myMasterNodes.length,
-                                itemBuilder: (context, index) {
-                                  var mn = _myMasterNodes.elementAt(index);
-                                  return SelectableText(mn['ownerAuthAddress'] ?? '');
-                                })
-                          ]) : Text('No Masternods found')])))
-            ])
-          ),
-        ),
-      ],
-    ));
+                    )
+                  ])),
+            ),
+            LimitedBox(
+              maxWidth: 350,
+              child: Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: CustomScrollView(slivers: [
+                    SliverToBoxAdapter(
+                        child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: FocusTraversalOrder(
+                                order: NumericFocusOrder(2.0),
+                                child: Column(children: [
+                                  Text('Address for donations:'),
+                                  SelectableText('dResgN7szqZ6rysYbbj2tUmqjcGHD4LmKs'),
+                                  TextField(
+                                    controller: _addressController,
+                                    decoration: InputDecoration(hintText: 'RPC Address'),
+                                  ),
+                                  TextField(
+                                    controller: _usernameController,
+                                    decoration: InputDecoration(hintText: 'RPC Username'),
+                                  ),
+                                  TextField(
+                                    controller: _passwordController,
+                                    decoration: InputDecoration(hintText: 'RPC Password'),
+                                  ),
+                                  Padding(padding: EdgeInsets.only(top: 10)),
+                                  ElevatedButton(onPressed: listMasterNodes, child: Text('LoadMasterNodes')),
+                                  Padding(padding: EdgeInsets.only(top: 10)),
+                                  ElevatedButton(onPressed: _masterNodesLoaded && _myMasterNodes.length > 0 ? signMessageCfpsWithAlert : null, child: Text('Sign'))
+                                ])))),
+                    SliverToBoxAdapter(
+                        child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              Text('Your Masternodes', style: Theme.of(context).textTheme.headline3),
+                              _myMasterNodes.length > 0
+                                  ? ListView(shrinkWrap: true, children: [
+                                      ListView.builder(
+                                          physics: BouncingScrollPhysics(),
+                                          scrollDirection: Axis.vertical,
+                                          shrinkWrap: true,
+                                          itemCount: _myMasterNodes.length,
+                                          itemBuilder: (context, index) {
+                                            var mn = _myMasterNodes.elementAt(index);
+                                            return SelectableText(mn['ownerAuthAddress'] ?? '');
+                                          })
+                                    ])
+                                  : Text('No Masternods found')
+                            ])))
+                  ])),
+            ),
+          ],
+        ));
 
     return Scaffold(
       appBar: AppBar(
