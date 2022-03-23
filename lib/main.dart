@@ -220,18 +220,12 @@ class _MyHomePageState extends State<MyHomePage> {
   var dfips = [
     new Proposal(id: 'dfip-2203-a', title: 'DFIP-2203-A: Solving dToken premium via future contracts', github: 'https://github.com/DeFiCh/dfips/issues/127', type: 'DFIP'),
     new Proposal(id: 'dfip-2203-b', title: 'DFIP-2203-B: Vault | Adding Ethereum as collateral for vaults', github: 'https://github.com/DeFiCh/dfips/issues/109', type: 'DFIP'),
-    new Proposal(
-        id: 'cfp-2203-01',
-        title: 'CFP-2203-01: Public REST API For Historical DEX Prices (2 600 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/125',
-        type: 'CFP',
-        defaultValue: Votes.YES),
+    new Proposal(id: 'cfp-2203-01', title: 'CFP-2203-01: Public REST API For Historical DEX Prices (2 600 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/125', type: 'CFP'),
     new Proposal(
         id: 'cfp-2203-02',
         title: 'CFP-2203-02: For moderation concerning the Telegram group: Crypto Steuern DACH (ENG/DE) (1 510 DFI)',
         github: 'https://github.com/DeFiCh/dfips/issues/126',
-        type: 'CFP',
-        defaultValue: Votes.YES),
+        type: 'CFP'),
     new Proposal(id: 'cfp-2203-03', title: 'CFP-2203-03: AlkCoin for DefiChain (0 DFI) ', github: 'https://github.com/DeFiCh/dfips/issues/129', type: 'CFP'),
     new Proposal(id: 'cfp-2203-04', title: 'CFP-2203-04: DeFiChain Community Blog (650 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/130', type: 'CFP'),
     new Proposal(
