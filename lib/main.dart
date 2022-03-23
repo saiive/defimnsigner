@@ -218,61 +218,33 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _masterNodesLoaded = false;
 
   var dfips = [
-    new Proposal(id: 'dfip-2202-a', title: 'DFIP-2202-A: Deposit of a Masternode as security for a loan', github: 'https://github.com/DeFiCh/dfips/issues/107', type: 'DFIP'),
+    new Proposal(id: 'dfip-2203-a', title: 'DFIP-2203-A: Solving dToken premium via future contracts', github: 'https://github.com/DeFiCh/dfips/issues/127', type: 'DFIP'),
+    new Proposal(id: 'dfip-2203-b', title: 'DFIP-2203-B: Vault | Adding Ethereum as collateral for vaults', github: 'https://github.com/DeFiCh/dfips/issues/109', type: 'DFIP'),
     new Proposal(
-        id: 'dfip-2202-b',
-        title: 'DFIP-2202-B: Invest 50% of DeFiChain\'s BTC/ETH/USDC/USDT Collateral in Cake\'s Lending Services',
-        github: 'https://github.com/DeFiCh/dfips/issues/109',
-        type: 'DFIP'),
-    new Proposal(
-        id: 'dfip-2202-c',
-        title: 'DFIP-2202-C: Vault | Collateralization Ratio to 125% / Interest Rate to 10% APR',
-        github: 'https://github.com/DeFiCh/dfips/issues/112',
-        type: 'DFIP'),
-    new Proposal(
-        id: 'cfp-2202-01',
-        title: 'CFP-2202-01: saiive.live Loans, Stocks, Composite Swap and Auctions (50 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/104',
+        id: 'cfp-2203-01',
+        title: 'CFP-2203-01: Public REST API For Historical DEX Prices (2 600 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/125',
         type: 'CFP',
         defaultValue: Votes.YES),
     new Proposal(
-        id: 'cfp-2202-02',
-        title: 'CFP-2202-02: saiive.live Infrastructure & employee payout (15 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/105',
+        id: 'cfp-2203-02',
+        title: 'CFP-2203-02: For moderation concerning the Telegram group: Crypto Steuern DACH (ENG/DE) (1 510 DFI)',
+        github: 'https://github.com/DeFiCh/dfips/issues/126',
         type: 'CFP',
         defaultValue: Votes.YES),
-    new Proposal(id: 'cfp-2202-03', title: 'CFP-2202-03: Liquidity Pool partnership for BSC (20 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/106', type: 'CFP'),
+    new Proposal(id: 'cfp-2203-03', title: 'CFP-2203-03: AlkCoin for DefiChain (0 DFI) ', github: 'https://github.com/DeFiCh/dfips/issues/129', type: 'CFP'),
+    new Proposal(id: 'cfp-2203-04', title: 'CFP-2203-04: DeFiChain Community Blog (650 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/130', type: 'CFP'),
     new Proposal(
-        id: 'cfp-2202-04',
-        title: 'CFP-2202-04: Marketing - bring DFI to the German and English speaking countries (25 000 DFI) ',
-        github: 'https://github.com/DeFiCh/dfips/issues/108',
+        id: 'cfp-2203-05',
+        title: 'CFP-2203-05: DeFiChain Captain - New features + ongoing maintenance (4 500 DFI) ',
+        github: 'https://github.com/DeFiCh/dfips/issues/131',
         type: 'CFP'),
-    new Proposal(id: 'cfp-2202-05', title: 'CFP-2202-05: Telegram Moderators (10 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/110', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2202-06', title: 'CFP-2202-06: Trading Wallet & Tool Set for dStocks Trading (75 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/111', type: 'CFP'),
-    new Proposal(id: 'cfp-2202-07', title: 'CFP-2202-07: DeFiChain NFTs (750 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/113', type: 'CFP'),
-    new Proposal(id: 'cfp-2202-08', title: 'CFP-2202-08: APOLLO MISSION - 1 (646 251 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/114', type: 'CFP'),
-    new Proposal(id: 'cfp-2202-09', title: 'CFP-2202-09: APOLLO MISSION - 2 (217 178 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/115', type: 'CFP'),
-    new Proposal(id: 'cfp-2202-10', title: 'CFP-2202-10: APOLLO MISSION - 3 (51 473 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/116', type: 'CFP'),
-    new Proposal(id: 'cfp-2202-11', title: 'CFP-2202-11: APOLLO MISSION - 4 (12 410 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/117', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2202-12',
-        title: 'CFP-2202-12: Defichain Chrome Extension - New features [option 2] (3 200 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/118',
-        type: 'CFP'),
-    new Proposal(id: 'cfp-2202-13', title: 'CFP-2202-13: Defichain Chrome Extension - Long term (20 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/119', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2202-14',
-        title: 'CFP-2202-14: Bounty DeFichain atomic swap exploit (1 000 000 DFI) and finder\'s reward',
-        github: 'https://github.com/DeFiCh/dfips/issues/120',
-        type: 'CFP'),
-    new Proposal(id: 'cfp-2202-15', title: 'CFP-2202-15: DeFiChain bug bounty fund pre-allocation (50 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/121', type: 'CFP'),
-    new Proposal(id: 'cfp-2202-16', title: 'CFP-2202-16: DeFiChain Core Developer (25 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/122', type: 'CFP'),
-    new Proposal(
-        id: 'cfp-2202-17',
-        title: 'CFP-2202-17: Defichain Value - New features and ongoing maintenance (12 000 DFI)',
-        github: 'https://github.com/DeFiCh/dfips/issues/123',
-        type: 'CFP'),
+    new Proposal(id: 'cfp-2203-06', title: 'CFP-2203-06: DefiChain Sports App (189500 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/132', type: 'CFP'),
+    new Proposal(id: 'cfp-2203-07', title: 'CFP-2203-07: DeFiChain Python Library (1 800 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/133', type: 'CFP'),
+    new Proposal(id: 'cfp-2203-08', title: 'CFP-2203-08: Defichain-Ecosystem (2 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/134', type: 'CFP'),
+    new Proposal(id: 'cfp-2203-09', title: 'CFP-2203-09: Extending Dobby with phone notifications (30 000 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/136', type: 'CFP'),
+    new Proposal(id: 'cfp-2203-10', title: 'CFP-2203-10: Masternode Monitor 2.0 (12 500 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/137', type: 'CFP'),
+    new Proposal(id: 'cfp-2203-11', title: 'CFP: Moonrize - Reddit Posting Bot (8 753 DFI)', github: 'https://github.com/DeFiCh/dfips/issues/138', type: 'CFP')
   ];
 
   @override
